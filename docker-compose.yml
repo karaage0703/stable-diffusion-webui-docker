@@ -55,3 +55,11 @@ services:
     environment:
       - PRELOAD=false
       - CLI_ARGS=
+
+  karaage:
+    <<: *base_service
+    profiles: ["karaage"]
+    build: ./services/karaage/
+    environment:
+      - PRELOAD=false
+      - CLI_ARGS=
