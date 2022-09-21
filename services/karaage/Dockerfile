@@ -24,9 +24,6 @@ EOF
 
 ENV WORKDIR=/stable-diffusion
 
-COPY . /docker
-RUN chmod +x /docker/mount.sh
-
 WORKDIR ${WORKDIR}
 RUN mkdir -p "${WORKDIR}/models/ldm/stable-diffusion-v1/"
 RUN ln -sf /cache/models/model.ckpt "${WORKDIR}/models/ldm/stable-diffusion-v1/model.ckpt"
