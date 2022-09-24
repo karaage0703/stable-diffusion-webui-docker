@@ -10,3 +10,5 @@ https://heibox.uni-heidelberg.de/f/31a76b13ea27482981b4/?dl=1
   out=LDSR.yaml
 https://heibox.uni-heidelberg.de/f/578df07c8fc04ffbadf3/?dl=1
   out=LDSR.ckpt
+https://thisanimedoesnotexist.ai/downloads/wd-v1-2-full-ema.ckpt
+   out=wd.ckpt

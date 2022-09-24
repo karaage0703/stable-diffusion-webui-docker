@@ -39,14 +39,25 @@ services:
       - *v2
       - ./services/AUTOMATIC1111/config.json:/stable-diffusion-webui/config.json
     environment:
-      - CLI_ARGS=--allow-code --medvram
+      - CLI_ARGS=--ckpt /cache/models/model.ckpt --allow-code --medvram
 
   automatic1111-cpu:
     <<: *automatic
     profiles: ["auto-cpu"]
     deploy: {}
     environment:
-      - CLI_ARGS=--no-half --precision full
+      - CLI_ARGS=--ckpt /cache/models/model.ckpt --no-half --precision full
+
+  automatic1111-waifu:
+    <<: *base_service
+    profiles: ["auto-waifu"]
+    build: ./services/AUTOMATIC1111
+    volumes:
+      - *v1
+      - *v2
+      - ./services/AUTOMATIC1111/config.json:/stable-diffusion-webui/config.json
+    environment:
+      - CLI_ARGS=--ckpt /cache/models/wd.ckpt --allow-code --medvram
 
   lstein:
     <<: *base_service
