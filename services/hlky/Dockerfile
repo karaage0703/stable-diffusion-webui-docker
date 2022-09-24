@@ -21,22 +21,6 @@ conda env update --file environment.yaml -n base
 conda clean -a -y
 EOF
 
-# Note: don't update the sha of previous versions because the install will take forever
-# instead, update the repo state in a later step
-ARG BRANCH=master
-# ARG SHA=833a91047df999302f699637768741cecee9c37b
-# ARG BRANCH=dev
-ARG SHA=17748cbc9c34df44d0381c42e4f0fe1903089438
-RUN <<EOF
-cd stable-diffusion
-git fetch
-git checkout ${BRANCH}
-git reset --hard ${SHA}
-conda env update --file environment.yaml -n base
-conda clean -a -y
-EOF
-
-RUN pip uninstall transformers -y && pip install -U --no-cache-dir pyperclip transformers==4.22
 
 # Latent diffusion
 RUN <<EOF
@@ -49,6 +33,21 @@ sed -i -- 's/from ldm/from ldm_latent/g' *.py
 EOF
 
 
+# Note: don't update the sha of previous versions because the install will take forever
+# instead, update the repo state in a later step
+# ARG BRANCH=master  SHA=d0bb60a139d60e6c2b9be4e18e0e29a86aa5af59
+ARG BRANCH=dev SHA=f585ab1923730339ea75d36b53ac1d5b6cbde500
+RUN <<EOF
+cd stable-diffusion
+git fetch
+git checkout ${BRANCH}
+git reset --hard ${SHA}
+conda env update --file environment.yaml -n base
+conda clean -a -y
+EOF
+
+RUN pip install -U --no-cache-dir pyperclip
+
 # add info
 COPY . /docker/
 RUN python /docker/info.py /stable-diffusion/frontend/frontend.py && chmod +x /docker/mount.sh
@@ -58,5 +57,5 @@ ENV TRANSFORMERS_CACHE=/cache/transformers TORCH_HOME=/cache/torch PYTHONPATH="$
 EXPOSE 7860
 # run, -u to not buffer stdout / stderr
 CMD /docker/mount.sh && \
-  python3 -u scripts/webui.py --outdir /output --ckpt /cache/models/model.ckpt --ldsr-dir /latent-diffusion --inbrowser ${CLI_ARGS}
-# STREAMLIT_SERVER_PORT=7860 python -m streamlit run scripts/webui_streamlit.py
+  python3 -u scripts/webui.py --outdir /output --ckpt /cache/models/model.ckpt --ldsr-dir /latent-diffusion ${CLI_ARGS}
+  # STREAMLIT_SERVER_PORT=7860 python -m streamlit run scripts/webui_streamlit.py  --theme.base dark
