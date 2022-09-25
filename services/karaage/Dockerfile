@@ -14,13 +14,15 @@ RUN
 
 
 RUN <<EOF
-git clone https://github.com/CompVis/stable-diffusion
+git clone -b karaage https://github.com/karaage0703/stable-diffusion
 cd stable-diffusion
-git reset --hard 69ae4b35e0a0f6ee1af8bb9a5d0016ccb27e36dc
 pip install -e .
 pip install -e git+https://github.com/CompVis/taming-transformers.git@master#egg=taming-transformers
 pip install -e git+https://github.com/openai/CLIP.git@main#egg=clip
 EOF
+
+
+ENV TRANSFORMERS_CACHE=/cache/transformers TORCH_HOME=/cache/torch CLI_ARGS=""
 
 ENV WORKDIR=/stable-diffusion
 

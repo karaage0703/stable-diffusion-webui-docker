@@ -71,6 +71,9 @@ services:
     <<: *base_service
     profiles: ["karaage"]
     build: ./services/karaage/
+    volumes:
+      - *v1
+      - *v2
     environment:
       - PRELOAD=false
       - CLI_ARGS=
