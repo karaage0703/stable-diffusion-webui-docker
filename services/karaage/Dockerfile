@@ -16,6 +16,7 @@ RUN
 RUN <<EOF
 git clone -b karaage https://github.com/karaage0703/stable-diffusion
 cd stable-diffusion
+git pull
 pip install -e .
 pip install -e git+https://github.com/CompVis/taming-transformers.git@master#egg=taming-transformers
 pip install -e git+https://github.com/openai/CLIP.git@main#egg=clip
