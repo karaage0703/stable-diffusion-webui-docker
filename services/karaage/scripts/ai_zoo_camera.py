@@ -6,6 +6,7 @@ import shutil
 import os
 import docker
 import subprocess
+from rembg.bg import remove
 
 """
 Demo program that displays a webcam using OpenCV
@@ -64,10 +65,14 @@ def main():
 
         elif event == 'Clear':
             recording = True
-            os.remove('./live.png')  
+            if is_file:
+                os.remove('./live.png')  
 
         elif event == 'Shutter':
             recording = False
+            frame = remove(frame)
+            imgbytes = cv2.imencode('.png', frame)[1].tobytes()
+            window['image'].update(data=imgbytes)
             cv2.imwrite('./input.png', frame)
 
         elif event == 'Convert':
